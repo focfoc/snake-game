@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+body{ margin: 0; padding: 50px; background-color: #222; color: white;}
+p { margin: 0; }
+
+.box{ margin: 0 auto; border: 1px solid white;}
+.box-top{ display: flex;}
+.box-top .b-right { padding: 10px; width: 40%; }
+.box-top .b-left { padding: 10px 15px; width: 60%; }
+.box-top .b-left button {float: right; padding: 5px 10px; background: transparent; border: 1px solid white; color: white; }
+
+[data-snake-table]{ display: table; position:relative; margin: 0 auto;}
+[data-snake-table] > div{ display: table-row; }
+[data-snake-table] > div > div{ display: table-cell; width: 30px; height: 30px; background-color:#161c24; }
+
+[data-snake-snake]{ position:absolute; width: 30px; height: 30px; background-color: #536720; } 
+[data-apple]{ position:absolute; width: 30px; height: 30px; background-color: red; } 
