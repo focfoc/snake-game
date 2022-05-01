@@ -2,17 +2,21 @@
 const snakeLoad = function () {
     //맵생성 x = width , y = height
     const x = 17, y = 17;
-    const snake_table = document.querySelector('[data-snake-table]');
     let self;
     const snake = {
-        snake_arr : '',
+        snake_table : document.querySelector('[data-snake-table]'),
+        snake_view : document.querySelector('[data-snake-snake]'),
+        apple : document.querySelector('[data-apple]'),
+        snake_size : window.getComputedStyle(document.querySelector('[data-snake-snake]')).width.replace('px', ''),
+        move : 1,
+        apple_loaction : 0,
+        snake_arr : [],
     };
     return {
         init: function () {
             self = this;
-            
-            //스네이크 게임 맵 생성 x * y
-            self.loadMap();
+
+            if(snake.snake_size > 100) location.reload();
             
             //스네이크 세팅
             self.initSnake();
@@ -23,109 +27,87 @@ const snakeLoad = function () {
             //스네이크 동작
             self.moveSnake();
         },
-        //스네이크 게임 맵 생성
-        loadMap : function(){
-            const snake = '<div data-snake-snake></div>';
-            const apple = '<div data-apple></div>';
-            let append_txt = '';
-            let td_txt = '';
-
-            //tr 만들기
-            for(let i=0; i < x; i++){
-                append_txt += `<div>`;
-                
-                //td 만들기
-                for(let j=0; j<y; j++){
-                    append_txt += `<div data-x=${i} data-y=${j}></div>`;
-                }
-
-                append_txt += `</div>`;
-            }
-            append_txt += snake;
-            append_txt += apple;
-            
-            snake_table.innerHTML = append_txt;
+        //스네이크 세팅
+        //스네이크 맵 꾸미기(div에 width값을 줘서 흰색 테두리를 준다)
+        initSnake : function(){
 
             //스네이크 맵 꾸미기(div에 width값을 줘서 흰색 테두리를 준다)
-            const snake_table_width = window.getComputedStyle(snake_table).width;
-            document.querySelector('.box-top').style.width = snake_table_width;
-            document.querySelector('.box-bottom').style.width = snake_table_width;
-
-        },
-        //스네이크 세팅
-        initSnake : function(){
-            const cell_width = snake_table.clientWidth / x;
-            const cell_height = snake_table.clientHeight / y; 
-
-            //snake에 움직일 값, 전체 길이를 담아준다
-            snake.width = snake_table.clientWidth;
-            snake.height = snake_table.clientHeight;
-            //움직일 값
-            snake.cell_width = cell_width;
-            snake.cell_height = cell_height;
+            document.querySelector('.box-top').style.width = snake.snake_size * x + 'px';
+            document.querySelector('.box-bottom').style.width = snake.snake_size * x + 'px';
+            document.querySelector('.box-bottom').style.height = snake.snake_size * y + 'px';
 
             //스네이크 보여주기
-            self.loadSnake();
+            self.reloadSnake();
 
         },
-        //스네이크 보여주기
-        loadSnake : function(){
-            const center_x = Math.ceil(x/ 4) ;
-            const center_y = Math.ceil(y/ 2) ;
-
-            //화면에 뿌려주기
-            const snake_view = document.querySelector('[data-snake-snake]');
-            snake_view.style.top = snake.cell_height * ( center_y - 1 ) + 'px';        
-            snake_view.style.left = snake.cell_width * ( center_x - 1 ) + 'px';
-
+        //스네이크 초기화
+        reloadSnake : function(){
+            //스네이크 뿌릴 위치
+            const center_x = Math.ceil(x/ 4) - 1 ;
+            const center_y = Math.ceil(y/ 2) - 1 ;
+            snake.snake_arr = [ center_x * x + center_y ];
+            //화면에 노출
+            self.loadSnake(snake.snake_arr[0]);
+        },
+        //스네이크 보여주기(추가되는 경우)
+        loadSnake : function(element){
+            
+            const snakeNode = snake.snake_view.cloneNode(true);
+            snakeNode.style.top = snake.snake_size * ( element % x ) + 'px';
+            snakeNode.style.left = snake.snake_size * ( Math.floor(element / x) ) + 'px';
+            snakeNode.classList.remove("hide");
+            snake.snake_table.append(snakeNode);
+            
         },
         //사과 랜덤
         randomApple : function(){
-            const apple = document.querySelector('[data-apple]');
+            const apple_x = Math.floor(Math.random() * x);
+            const apple_y = Math.floor(Math.random() * y);
 
-            apple.style.top = snake.cell_height * ( Math.floor(Math.random() * y) ) + 'px';        
-            apple.style.left = snake.cell_width * ( Math.floor(Math.random() * x) ) + 'px';
+            snake.apple.style.top = snake.snake_size * apple_x + 'px';        
+            snake.apple.style.left = snake.snake_size * apple_y + 'px';
+
+            //apple_location 설정
+            snake.apple_loaction = apple_x * x + apple_y;
 
         },
         //스네이크 움직이기
         moveSnake : function(){
-            const snake_view = document.querySelector('[data-snake-snake]');
 
-            window.onkeydown = (e) => {
+            setInterval(() => {
 
-                if(e.code == 'ArrowUp' || e.code == 'ArrowDown' || e.code == 'ArrowLeft' || e.code == 'ArrowRight'){
-                    
-                    const top_px = Number(snake_view.style.top.replace('px', ''));
-                    const left_px = Number(snake_view.style.left.replace('px', ''));
-                    let move_top_px = top_px, move_left_px = left_px;
+                const snakeArr = document.querySelectorAll('[data-snake-table] [data-snake-snake]');
+                const firstSnake = snakeArr[0];//뱀의 머리
+                const lastSnake = snakeArr[snakeArr.length - 1];//뱀의 꼬리
 
-                    if(e.code == 'ArrowUp'){
-                        move_top_px = top_px - snake.cell_height;
-                    }
-                    if(e.code == 'ArrowDown'){
-                        move_top_px = top_px + snake.cell_height;
-                    }
-                    if(e.code == 'ArrowLeft'){
-                        move_left_px = left_px - snake.cell_width;
-                    }
-                    if(e.code == 'ArrowRight'){
-                        move_left_px= left_px + snake.cell_width ;
-                    }
-
-                    if(snake.width <= move_left_px || snake.height <= move_top_px || 
-                        0 > move_left_px || 0 > move_top_px ){
-                        alert('game over');
-                        //스네이크 보여주기
-                        self.loadSnake();
-                        return false;
-                    }
-
-                    snake_view.style.top = move_top_px + 'px';
-                    snake_view.style.left = move_left_px + 'px';
-
+                //실제로 이동
+                if(snake.move == 1){ //오른쪽
+                    firstSnake.style.left = (  Number(lastSnake.style.left.replace('px', '')) + Number(snake.snake_size) ) + 'px';
+                }else if(snake.move == -1){ //왼쪽
+                    firstSnake.style.left = (  Number(lastSnake.style.left.replace('px', '')) - Number(snake.snake_size) ) + 'px';
+                }else if(snake.move == -x){ //위
+                    firstSnake.style.top = (  Number(lastSnake.style.top.replace('px', '')) - Number(snake.snake_size) ) + 'px';
+                }else if(snake.move == x){ //아래
+                    firstSnake.style.top = (  Number(lastSnake.style.top.replace('px', '')) + Number(snake.snake_size) ) + 'px';
                 }
+                snake.snake_table.insertBefore(lastSnake, firstSnake);
+
+                //실제 값 변경
+                snake.snake_arr.unshift(snake.snake_arr[0] + snake.move);
+                snake.snake_arr.length = snake.snake_arr.length - 1;
+
+                //사과 먹은 경우
+
                 
 
+            }, 1000);
+
+            //키보드값에 따라 제어
+            window.onkeydown = (e) => {
+                if(e.code == 'ArrowUp'){ snake.move = -x; }
+                if(e.code == 'ArrowDown'){ snake.move = x; }
+                if(e.code == 'ArrowLeft'){ snake.move = -1; }
+                if(e.code == 'ArrowRight'){ snake.move = 1; }
             };
 
 
