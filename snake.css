@@ -12,5 +12,5 @@ p { margin: 0; }
 .box-top .b-left button {float: right; padding: 5px 10px; background: transparent; border: 1px solid white; color: white; }
 
 [data-snake-table]{ display: block; position:relative; margin: 0 auto; height:100%; background-color:#161c24; }
-[data-snake-snake]{ position:absolute; width: 30px; height: 30px; background-color: #536720; } 
-[data-apple]{ position:absolute; width: 30px; height: 30px; background-color: #5E2067; }
+[data-snake-snake]{ position:absolute; width: 30px; height: 30px; z-index: 2; background-color: #536720; } 
+[data-apple]{ position:absolute; width: 30px; height: 30px;  z-index: 1; background-color: #5E2067; }
