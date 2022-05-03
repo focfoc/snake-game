@@ -9,7 +9,8 @@ p { margin: 0; }
 .box-top{ display: flex;}
 .box-top .b-right { padding: 10px; width: 40%; }
 .box-top .b-left { padding: 10px 15px; width: 60%; }
-.box-top .b-left button {float: right; padding: 5px 10px; background: transparent; border: 1px solid white; color: white; }
+.box-top .b-left button {float: right; padding: 5px 10px; background: transparent; border: 1px solid white; box-shadow: 1px 1px 2px white; color: white; }
+.box-top .b-left button:hover { border: 1px solid rgb(228, 243, 162); color: cyan; }
 
 [data-snake-table]{ display: block; position:relative; margin: 0 auto; height:100%; background-color:#161c24; }
 [data-snake-snake]{ position:absolute; width: 30px; height: 30px; z-index: 2; background-color: #536720; } 
