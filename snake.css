@@ -1,17 +1,34 @@
 @charset "utf-8";
 
-body{ margin: 0; padding: 50px; background-color: #222; color: white;}
-p { margin: 0; }
+body{ margin: 0; padding: 50px; background-color: #222; color: white; font-family: 'VT323', monospace; font-size: 20px; letter-spacing: 0.03em;}
+input, textarea, button {font-family: 'VT323', monospace; font-size: 20px; letter-spacing: 0.03em;}
+p { margin: 0.1em; }
 .hide { position : absolute; top:0; left:-999999px}
+button {float: right; padding: 5px 10px; background: transparent; border: 1px solid white; box-shadow: 1px 1px 2px white; color: white; }
+button:hover { border: 1px solid rgb(228, 243, 162); color: cyan; }
 
 
 .box{ margin: 0 auto; border: 1px solid white;}
 .box-top{ display: flex;}
 .box-top .b-right { padding: 10px; width: 40%; }
 .box-top .b-left { padding: 10px 15px; width: 60%; }
-.box-top .b-left button {float: right; padding: 5px 10px; background: transparent; border: 1px solid white; box-shadow: 1px 1px 2px white; color: white; }
-.box-top .b-left button:hover { border: 1px solid rgb(228, 243, 162); color: cyan; }
 
 [data-snake-table]{ display: block; position:relative; margin: 0 auto; height:100%; background-color:#161c24; }
 [data-snake-snake]{ position:absolute; width: 30px; height: 30px; z-index: 2; background-color: #536720; } 
-[data-apple]{ position:absolute; width: 30px; height: 30px;  z-index: 1; background-color: #5E2067; }
+[data-apple]{ position:absolute; width: 30px; height: 30px;  z-index: 1; background-color: tomato; }
+
+/*game over*/
+.game-over-overlay {display: none; z-index: 1000; position: fixed; width: 100%; height: 100%; left: 0; top: 0; background-color: rgba(0,0,0, 0.4); overflow-x: hidden;}
+.game-over-overlay .game-over-wrap {position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); text-align: center;}
+.game-over-overlay .game-over-wrap .gameover {font-size: 100px;}
+.game-over-overlay .game-over-wrap .gameover-score { text-align: center; font-size: 30px;}
+.game-over-overlay .game-over-wrap button { float: none; margin-top: 30px;}
+
+
+/* 스네이크 얼굴 */
+[data-snake-table]{font-family: 'Press Start 2P', cursive; }
+[data-snake-table].right [data-snake-snake]:first-child::after{ display: block; position: absolute; content: attr(data-username) ".."; top: 1.5em; left: 1em; color: #000; transform: rotate( 90deg ); font-size: 10px; letter-spacing: 0.7em;}
+[data-snake-table].left [data-snake-snake]:first-child::after{ display: block; position: absolute; content: attr(data-username) ".."; top: 1.5em; left: -1em; color: #000; transform: rotate( 90deg ); font-size: 10px; letter-spacing: 0.7em;}
+[data-snake-table].up [data-snake-snake]:first-child::after{ display: block; position: absolute; content: attr(data-username) ".."; color: #000; top: 0em; left: 0.3em; transform: rotate( 0deg ); font-size: 10px; letter-spacing: 0.7em;}
+[data-snake-table].down [data-snake-snake]:first-child::after{ display: block; position: absolute; content: attr(data-username) ".."; color: #000; top: 1.8em; left: 0.3em; transform: rotate( 0deg ); font-size: 10px; letter-spacing: 0.7em;}
+[data-snake-table].die [data-snake-snake]:first-child::after{ content: attr(data-username) "xx";}
