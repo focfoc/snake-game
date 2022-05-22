@@ -32,6 +32,9 @@ const snakeLoad = function () {
             //스네이크 게임 시작 버튼 클릭
             self.snakeGameStart();
 
+            //스네이크 동작
+            self.controlSnake();
+
             //재시작 버튼 클릭
             self.restartSnake();
         },
@@ -103,14 +106,12 @@ const snakeLoad = function () {
                 if(!snake.isStart){
                     //스네이크 동작
                     snake.isStart = true;
-                    self.controlSnake();
+                    snake.interval = setInterval(self.moveSnake, snake.speed);
                 }
             });
         },
         //스네이크 컨트롤
         controlSnake : function(){
-
-            snake.interval = setInterval(self.moveSnake, snake.speed);
 
             //키보드값에 따라 제어, 반대편 입력하지 않은 경우에만 가능
             window.onkeydown = (e) => {
@@ -120,10 +121,10 @@ const snakeLoad = function () {
                     //게임이 종료되었을 경우 더이상 움직이지 않게 지정
                     if(!snake.isStart) return false;
 
-                    if(e.code == 'ArrowUp' && Math.abs(snake.move) != y){ snake.move = -y; }
-                    else if(e.code == 'ArrowDown' && Math.abs(snake.move) != y){ snake.move = y; }
-                    else if(e.code == 'ArrowLeft' && Math.abs(snake.move) != 1){ snake.move = -1; }
-                    else if(e.code == 'ArrowRight' && Math.abs(snake.move) != 1){ snake.move = 1; }
+                    if(e.code == 'ArrowUp' && Math.abs(snake.move) != y){ snake.move = -y; snake.snake_table.className = 'up';}
+                    else if(e.code == 'ArrowDown' && Math.abs(snake.move) != y){ snake.move = y; snake.snake_table.className = 'down'; }
+                    else if(e.code == 'ArrowLeft' && Math.abs(snake.move) != 1){ snake.move = -1; snake.snake_table.className = 'left';}
+                    else if(e.code == 'ArrowRight' && Math.abs(snake.move) != 1){ snake.move = 1; snake.snake_table.className = 'right'; }
                     else{ return false;}
                     
                     //뱀의 실제 이동
@@ -182,19 +183,15 @@ const snakeLoad = function () {
             }else{
                 //실제로 이동
                 if(snake.move == 1){ //오른쪽
-                    snake.snake_table.className = 'right';
                     last_snake.style.top = first_snake.style.top;
                     last_snake.style.left = (  Number(first_snake.style.left.replace('px', '')) + Number(snake.snake_size) ) + 'px';
                 }else if(snake.move == -1){ //왼쪽
-                    snake.snake_table.className = 'left';
                     last_snake.style.top = first_snake.style.top;
                     last_snake.style.left = (  Number(first_snake.style.left.replace('px', '')) - Number(snake.snake_size) ) + 'px';
                 }else if(snake.move == -y){ //위
-                    snake.snake_table.className = 'up';
                     last_snake.style.left = first_snake.style.left;
                     last_snake.style.top = (  Number(first_snake.style.top.replace('px', '')) - Number(snake.snake_size) ) + 'px';
                 }else if(snake.move == y){ //아래
-                    snake.snake_table.className = 'down'; 
                     last_snake.style.left = first_snake.style.left;
                     last_snake.style.top = (  Number(first_snake.style.top.replace('px', '')) + Number(snake.snake_size) ) + 'px';
                 }
