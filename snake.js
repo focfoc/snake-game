@@ -70,7 +70,8 @@ const snakeLoad = function () {
             //화면에 노출
             self.loadSnake(snake.snake_arr[0]);
         },
-        //스네이크 보여주기(추가되는 경우)
+        //스네이크 보여주기
+        //뱀의 몸통이 추가되는 경우
         loadSnake : function(element){       
             const snakeNode = snake.snake_view.cloneNode(true);
             snakeNode.style.top = snake.snake_size * ( Math.floor(element / y) ) + 'px';
@@ -101,8 +102,8 @@ const snakeLoad = function () {
                 //시작하지 않았다면 동작할 수 있도록
                 if(!snake.isStart){
                     //스네이크 동작
-                    self.controlSnake();
                     snake.isStart = true;
+                    self.controlSnake();
                 }
             });
         },
@@ -114,24 +115,29 @@ const snakeLoad = function () {
             //키보드값에 따라 제어, 반대편 입력하지 않은 경우에만 가능
             window.onkeydown = (e) => {
 
-                //키 값을 공통으로 사용하는 함수를 사용
-                let isArrowKey = false;
+                if(e.code == 'ArrowUp' || e.code == 'ArrowDown' || e.code == 'ArrowLeft' || e.code == 'ArrowRight'){
 
-                if(e.code == 'ArrowUp' && Math.abs(snake.move) != y){ snake.move = -y; isArrowKey = true; snake.snake_table.className = 'up'; }
-                else if(e.code == 'ArrowDown' && Math.abs(snake.move) != y){ snake.move = y; isArrowKey = true; snake.snake_table.className = 'down'; }
-                else if(e.code == 'ArrowLeft' && Math.abs(snake.move) != 1){ snake.move = -1; isArrowKey = true; snake.snake_table.className = 'left';}
-                else if(e.code == 'ArrowRight' && Math.abs(snake.move) != 1){ snake.move = 1; isArrowKey = true; snake.snake_table.className = 'right';}
-                
-                //방향키를 누른 경우
-                if(isArrowKey){
+                    //게임이 종료되었을 경우 더이상 움직이지 않게 지정
+                    if(!snake.isStart) return false;
+
+                    if(e.code == 'ArrowUp' && Math.abs(snake.move) != y){ snake.move = -y; }
+                    else if(e.code == 'ArrowDown' && Math.abs(snake.move) != y){ snake.move = y; }
+                    else if(e.code == 'ArrowLeft' && Math.abs(snake.move) != 1){ snake.move = -1; }
+                    else if(e.code == 'ArrowRight' && Math.abs(snake.move) != 1){ snake.move = 1; }
+                    else{ return false;}
+                    
+                    //뱀의 실제 이동
+                    //방향키를 누른 경우 interval을 초기화 한 후 다시 실행해준다.
                     self.moveSnake();
                     clearInterval(snake.interval);
                     snake.interval = setInterval(self.moveSnake, snake.speed);
+                
                 }
+
             };
 
         },
-        //스네이크 움직이기
+        //스네이크의 실제 동작
         moveSnake : function(){
 
             const snake_view_arr = document.querySelectorAll('[data-snake-table] [data-snake-snake]');
@@ -155,6 +161,7 @@ const snakeLoad = function () {
             snake.snake_arr.unshift(move_snake);
 
             //사과 먹은 경우
+            //사과 랜덤으로 노출 후 점수 증가, 속도증가
             if(snake.snake_arr[0] == snake.apple_loaction){
                 
                 self.loadSnake(snake.apple_loaction);
@@ -169,21 +176,29 @@ const snakeLoad = function () {
                 //interval 재시작
                 clearInterval(snake.interval);
                 snake.interval = setInterval(self.moveSnake, snake.speed);
-            }else{//먹지 않은 경우
+
+            //먹지 않은 경우
+            //실제로 뱀이 움직이는 모습을 보여줌, 실제 값 변경
+            }else{
                 //실제로 이동
                 if(snake.move == 1){ //오른쪽
+                    snake.snake_table.className = 'right';
                     last_snake.style.top = first_snake.style.top;
                     last_snake.style.left = (  Number(first_snake.style.left.replace('px', '')) + Number(snake.snake_size) ) + 'px';
                 }else if(snake.move == -1){ //왼쪽
+                    snake.snake_table.className = 'left';
                     last_snake.style.top = first_snake.style.top;
                     last_snake.style.left = (  Number(first_snake.style.left.replace('px', '')) - Number(snake.snake_size) ) + 'px';
                 }else if(snake.move == -y){ //위
+                    snake.snake_table.className = 'up';
                     last_snake.style.left = first_snake.style.left;
                     last_snake.style.top = (  Number(first_snake.style.top.replace('px', '')) - Number(snake.snake_size) ) + 'px';
                 }else if(snake.move == y){ //아래
+                    snake.snake_table.className = 'down'; 
                     last_snake.style.left = first_snake.style.left;
                     last_snake.style.top = (  Number(first_snake.style.top.replace('px', '')) + Number(snake.snake_size) ) + 'px';
                 }
+                //실제 값 변경
                 snake.snake_table.insertBefore(last_snake, first_snake);
                 snake.snake_arr.pop();
             }
@@ -206,6 +221,7 @@ const snakeLoad = function () {
             document.querySelector('.game-over-overlay').style.display = 'block';
         },
         //재시작 버튼 클릭
+        //뱀을 시작 전으로 초기화한다(시작 버튼 누르기 전)
         restartSnake : function(){
             const button = document.querySelector('.game-over-overlay button');
 
