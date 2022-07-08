@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="box box-top">
+    <div class="box box-top-wrap">
         <div class="b-right">
             <p>now : <span data-now>0</span></p>
             <p>best : <span data-best>0</span></p>
@@ -22,12 +22,12 @@
             <button data-start>start</button>
         </div>
     </div>
-    <div class="box box-bottom">
-        <div class="right" data-snake-table>
-            <div data-apple></div>
+    <div class="box box-bottom-wrap">
+        <div id="snake-map" class="right" data-snake-map>
+            <div class="apple" data-apple></div>
         </div>
     </div>
-    <div data-snake-snake class="hide"></div>
+    <div class="snake hide" data-snake></div>
     <div class="game-over-overlay">
         <div class="game-over-wrap">
             <p class="gameover">GAME OVER</p>
