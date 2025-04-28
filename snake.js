@@ -9,6 +9,7 @@ const SnakeLoad = function () {
 
     // move : 이동 값, 1 : right, -1 : left, -map_hieght : up, map_height : down
     // default > 1
+    // speed : 단위(ms) Interval 갱신 주기
     // snake_location_arr : 뱀 위치 배열, 뱀 꼬리 추가 시 배열 추가
     const snake = {
         snake_map_selector : document.querySelector('[data-snake-map]'),
@@ -21,8 +22,8 @@ const SnakeLoad = function () {
         snake_location_arr : [],
         isStart : false,
         interval : null,
-        speed : 400,
-        max_speed : 200, 
+        speed : 300,
+        max_speed : 50, 
     };
     return {
         init: function () {
@@ -88,7 +89,7 @@ const SnakeLoad = function () {
             snake_clone_node.style.top = snake.snake_size * ( Math.floor(location / map_height) ) + 'px';
             snake_clone_node.style.left = snake.snake_size * ( location % map_width ) + 'px';
             snake_clone_node.classList.remove("hide");
-            snake.snake_map_selector.prepend(snake_node);
+            snake.snake_map_selector.prepend(snake_clone_node);
         },
         //사과 랜덤
         randomApple : function(){
@@ -166,8 +167,8 @@ const SnakeLoad = function () {
                 //점수 카운팅
                 snake.score_selector.innerHTML = Number(snake.score_selector.innerText) + 1 ;
                 //속도 증가
-                if(snake.max_speed > snake.speed){
-                    snake.speed -= 10;
+                if(snake.max_speed < snake.speed){
+                    snake.speed -= 30;
                 }
                 //interval 재시작
                 clearInterval(snake.interval);

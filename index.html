@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Snake Game</title>
+    <link rel="stylesheet" href="./snake.css">
+    <script defer type="text/javascript" src="./snake.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="box box-top-wrap">
+        <div class="b-right">
+            <p>now : <span data-now>0</span></p>
+            <p>best : <span data-best>0</span></p>
+        </div>
+        <div class="b-left">
+            <button data-start>start</button>
+        </div>
+    </div>
+    <div class="box box-bottom-wrap">
+        <div id="snake-map" class="right" data-snake-map>
+            <div class="apple" data-apple></div>
+        </div>
+    </div>
+    <div class="snake hide" data-snake></div>
+    <div class="game-over-overlay">
+        <div class="game-over-wrap">
+            <p class="gameover">GAME OVER</p>
+            <p class="gameover-score">now : <span data-end-score>0</span></p>
+            <p class="gameover-score">best : <span data-best>0</span></p>
+            <button>restart</button>
+        </div>
+    </div>
+</body>
+</html>
